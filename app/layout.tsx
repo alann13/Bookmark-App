@@ -2,6 +2,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
+import { Toaster } from '@/components/ui/toaster'
 import { syncUser } from '@/lib/auth'
 
 const manrope = Manrope({
@@ -20,7 +21,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${manrope.variable} antialiased`}>{children}</body>
+        <body className={`${manrope.variable} antialiased`}>
+          {children}
+          <Toaster />
+        </body>
       </html>
     </ClerkProvider>
   )

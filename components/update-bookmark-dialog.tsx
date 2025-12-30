@@ -3,6 +3,7 @@
 import { X } from 'lucide-react'
 import { useEffect, useState, useTransition } from 'react'
 import type { BookmarkWithTags } from '@/db/types'
+import { useToast } from '@/hooks/use-toast'
 import { updateBookmark } from '@/lib/actions'
 
 interface UpdateBookmarkDialogProps {
@@ -15,6 +16,7 @@ export function UpdateBookmarkDialog({ bookmark, isOpen, onClose }: UpdateBookma
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [descriptionCount, setDescriptionCount] = useState(bookmark.description?.length || 0)
+  const { toast } = useToast()
 
   // Reset state when dialog opens with a new bookmark or same bookmark
   useEffect(() => {
@@ -36,6 +38,7 @@ export function UpdateBookmarkDialog({ bookmark, isOpen, onClose }: UpdateBookma
         setError(result.error as string)
       } else {
         onClose()
+        toast({ title: 'Changes saved.' })
       }
     })
   }

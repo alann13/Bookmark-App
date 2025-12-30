@@ -2,6 +2,7 @@
 
 import { Plus, X } from 'lucide-react'
 import { useState, useTransition } from 'react'
+import { useToast } from '@/hooks/use-toast'
 import { createBookmark } from '@/lib/actions'
 
 export function AddBookmarkDialog() {
@@ -9,6 +10,7 @@ export function AddBookmarkDialog() {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [descriptionCount, setDescriptionCount] = useState(0)
+  const { toast } = useToast()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -23,6 +25,8 @@ export function AddBookmarkDialog() {
       } else {
         setIsOpen(false)
         setDescriptionCount(0) // Reset count
+        toast({ title: 'Bookmark added successfully.' })
+
         // Note: Form reset happens automatically when the modal unmounts/remounts next time it opens,
         // OR we should force a reset if we want to keep the modal generic.
         // With conditional rendering {isOpen && ...}, the form is destroyed on close.

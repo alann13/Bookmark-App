@@ -3,6 +3,7 @@
 import { Archive, ArchiveRestore, Calendar, Clock, Copy, ExternalLink, Eye, MoreVertical, Pencil, Pin, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, useTransition } from 'react'
 import type { BookmarkWithTags } from '@/db/types'
+import { useToast } from '@/hooks/use-toast'
 import { archiveBookmark, deleteBookmark, unarchiveBookmark, updateBookmarkPin } from '@/lib/actions'
 import { UpdateBookmarkDialog } from './update-bookmark-dialog'
 
@@ -21,6 +22,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const [showUnarchiveDialog, setShowUnarchiveDialog] = useState(false)
   const [isPending, startTransition] = useTransition()
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const { toast } = useToast()
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -41,7 +43,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const handleCopyUrl = async () => {
     try {
       await navigator.clipboard.writeText(url)
-      // Optional: Show toast
+      toast({ title: 'Link copied to clipboard.' })
     } catch (err) {
       console.error('Failed to copy', err)
     }
@@ -60,6 +62,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const handleConfirmArchive = () => {
     startTransition(async () => {
       await archiveBookmark(id)
+      toast({ title: 'Bookmark archived.' })
     })
     setShowArchiveDialog(false)
   }
@@ -67,6 +70,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const handleConfirmUnarchive = () => {
     startTransition(async () => {
       await unarchiveBookmark(id)
+      toast({ title: 'Bookmark restored.' })
     })
     setShowUnarchiveDialog(false)
   }
@@ -74,13 +78,18 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const handleDelete = () => {
     startTransition(async () => {
       await deleteBookmark(id)
+      toast({ title: 'Bookmark deleted.' })
     })
     setShowDeleteDialog(false)
   }
 
   const handlePinToggle = () => {
     startTransition(async () => {
-      await updateBookmarkPin(id, !isPinned)
+      const newPinnedState = !isPinned
+      await updateBookmarkPin(id, newPinnedState)
+      if (newPinnedState) {
+        toast({ title: 'Bookmark pinned to top.' })
+      }
     })
   }
 
