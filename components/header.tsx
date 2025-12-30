@@ -15,7 +15,7 @@ export function Header({ onSearch }: HeaderProps) {
   return (
     <header className="flex items-center justify-between border-b border-neutral-300 bg-white px-4 py-3 md:py-0 md:h-[78px] md:px-8 gap-2.5">
       <div className="flex items-center gap-2.5 flex-1 md:flex-none md:gap-4">
-        <button onClick={toggle} className="lg:hidden p-2.5 text-neutral-500 border border-neutral-300 hover:text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors bg-white shrink-0" aria-label="Toggle sidebar" type="button">
+        <button onClick={toggle} className="lg:hidden p-2.5 text-neutral-500 border border-neutral-300 hover:text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors bg-white shrink-0 cursor-pointer" aria-label="Toggle sidebar" type="button">
           <Menu className="w-5 h-5" />
         </button>
 
@@ -37,7 +37,7 @@ export function Header({ onSearch }: HeaderProps) {
       <div className="flex items-center gap-2.5 md:gap-4 shrink-0">
         <AddBookmarkDialog />
 
-        <div className="hidden md:block h-8 w-[1px] bg-neutral-300 mx-2" />
+        <div className="hidden md:block h-8 w-px bg-neutral-300 mx-2" />
         <UserButton
           appearance={{
             elements: {
