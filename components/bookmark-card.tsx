@@ -1,16 +1,16 @@
 'use client'
 
-import { Calendar, Clock, Eye, MoreVertical, Pin, Trash2, Archive, Copy, ExternalLink, X } from 'lucide-react'
+import { Archive, ArchiveRestore, Calendar, Clock, Copy, ExternalLink, Eye, MoreVertical, Pin, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, useTransition } from 'react'
 import type { BookmarkWithTags } from '@/db/types'
-import { archiveBookmark, deleteBookmark } from '@/lib/actions'
+import { archiveBookmark, deleteBookmark, unarchiveBookmark } from '@/lib/actions'
 
 interface BookmarkCardProps {
   bookmark: BookmarkWithTags
 }
 
 export function BookmarkCard({ bookmark }: BookmarkCardProps) {
-  const { id, title, url, description, tags, isPinned, visitedCount, lastVisited, createdAt } = bookmark
+  const { id, title, url, description, tags, isPinned, visitedCount, lastVisited, createdAt, isArchived } = bookmark
   const hostname = new URL(url).hostname
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -44,9 +44,13 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
     setIsDropdownOpen(false)
   }
 
-  const handleArchive = () => {
+  const handleArchiveToggle = () => {
     startTransition(async () => {
-      await archiveBookmark(id)
+      if (isArchived) {
+        await unarchiveBookmark(id)
+      } else {
+        await archiveBookmark(id)
+      }
     })
     setIsDropdownOpen(false)
   }
@@ -93,9 +97,9 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
                   <Copy className="w-4 h-4 text-neutral-500" />
                   Copy URL
                 </button>
-                <button type="button" onClick={handleArchive} disabled={isPending} className="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2 disabled:opacity-50">
-                  <Archive className="w-4 h-4 text-neutral-500" />
-                  Archive
+                <button type="button" onClick={handleArchiveToggle} disabled={isPending} className="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2 disabled:opacity-50">
+                  {isArchived ? <ArchiveRestore className="w-4 h-4 text-neutral-500" /> : <Archive className="w-4 h-4 text-neutral-500" />}
+                  {isArchived ? 'Unarchive' : 'Archive'}
                 </button>
                 <div className="h-px bg-neutral-100 my-1"></div>
                 <button
@@ -160,7 +164,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Backdrop */}
           <button type="button" className="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-default border-none" onClick={() => setShowDeleteDialog(false)} aria-label="Close dialog" />
-          <div className="relative z-10 w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6 m-4 animate-in fade-in zoom-in-95 duration-200">
+          <div className="relative z-10 w-full max-w-144 bg-white rounded-2xl shadow-2xl p-6 m-4 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-lg font-bold text-neutral-900">Delete bookmark?</h3>
               <button type="button" onClick={() => setShowDeleteDialog(false)} className="text-neutral-400 hover:text-neutral-600 transition-colors" aria-label="Close">

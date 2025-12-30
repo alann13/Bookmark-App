@@ -114,6 +114,27 @@ export async function archiveBookmark(id: string) {
   }
 }
 
+export async function unarchiveBookmark(id: string) {
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('Unauthorized')
+  }
+
+  try {
+    await db
+      .update(bookmarks)
+      .set({ isArchived: false })
+      .where(and(eq(bookmarks.id, id), eq(bookmarks.userId, userId)))
+
+    revalidatePath('/bookmark-manager', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to unarchive bookmark:', error)
+    return { error: 'Failed to unarchive bookmark' }
+  }
+}
+
 export async function deleteBookmark(id: string) {
   const { userId } = await auth()
 
