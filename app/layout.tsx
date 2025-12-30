@@ -20,10 +20,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${manrope.variable} antialiased`}>
-          <header className="flex justify-end items-center p-4 gap-4 h-16"></header>
-          {children}
-        </body>
+        <body className={`${manrope.variable} antialiased`}>{children}</body>
       </html>
     </ClerkProvider>
   )

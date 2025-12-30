@@ -27,3 +27,7 @@ export const insertBookmarkSchema = z.object({
 export const insertTagSchema = z.object({
   name: z.string().min(1, 'Tag name is required'),
 })
+
+export type BookmarkWithTags = Bookmark & {
+  tags: string[]
+}
