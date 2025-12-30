@@ -28,8 +28,8 @@ export default async function HomePage() {
             </SignUpButton>
           </SignedOut>
           <SignedIn>
-            <Link href="/dashboard" className="text-neutral-600 hover:text-neutral-900 font-medium px-4 py-2 transition-colors mr-2">
-              Go to Dashboard
+            <Link href="/bookmark-manager" className="text-neutral-600 hover:text-neutral-900 font-medium px-4 py-2 transition-colors mr-2">
+              Go to Bookmark Manager
             </Link>
             <UserButton />
           </SignedIn>
@@ -65,7 +65,7 @@ export default async function HomePage() {
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
-                <Link href="/dashboard">
+                <Link href="/bookmark-manager">
                   <button type="button" className="w-full sm:w-auto bg-teal-700 hover:bg-teal-800 text-white text-lg font-bold rounded-xl px-8 py-4 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                     View My Bookmarks
                   </button>

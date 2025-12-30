@@ -9,6 +9,7 @@ export default function Page() {
             colorPrimary: '#014745',
           },
         }}
+        forceRedirectUrl="/bookmark-manager"
       />
     </div>
   )
