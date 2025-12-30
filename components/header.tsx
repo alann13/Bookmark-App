@@ -36,9 +36,6 @@ export function Header({ onSearch }: HeaderProps) {
       {/* Right Toolbar */}
       <div className="flex items-center gap-4">
         <AddBookmarkDialog />
-
-        <div className="h-8 w-[1px] bg-neutral-300 mx-2" />
-
         <UserButton
           appearance={{
             elements: {

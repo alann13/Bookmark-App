@@ -32,9 +32,9 @@ export function AddBookmarkDialog() {
 
   return (
     <>
-      <button type="button" onClick={() => setIsOpen(true)} className="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2.5 rounded-lg font-semibold transition-colors shadow-sm cursor-pointer">
+      <button type="button" onClick={() => setIsOpen(true)} className="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white p-2.5 md:px-4 md:py-2.5 rounded-lg font-semibold transition-colors shadow-sm cursor-pointer">
         <Plus className="w-5 h-5" />
-        <span>Add bookmark</span>
+        <span className="hidden md:inline">Add bookmark</span>
       </button>
 
       {isOpen && (
