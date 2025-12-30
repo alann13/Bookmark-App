@@ -2,6 +2,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
+import { syncUser } from '@/lib/auth'
 
 const manrope = Manrope({
   variable: '--font-manrope',
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
   description: 'Organize your bookmarks',
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  await syncUser()
+
   return (
     <ClerkProvider>
       <html lang="en">
