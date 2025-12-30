@@ -90,7 +90,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
           </div>
 
           <div className="relative" ref={dropdownRef}>
-            <button type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="w-8 h-8 flex items-center justify-center rounded-lg border border-neutral-200 text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700 transition-colors">
+            <button type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="w-8 h-8 flex items-center justify-center rounded-lg border border-neutral-200 text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700 transition-colors cursor-pointer">
               <MoreVertical className="w-4 h-4" />
             </button>
 
@@ -172,7 +172,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
             )}
           </div>
 
-          <button type="button" onClick={handlePinToggle} disabled={isPending} className={`hover:text-neutral-900 transition-colors ${isPinned ? 'text-neutral-900' : 'text-neutral-400'} disabled:opacity-50`} title={isPinned ? 'Unpin bookmark' : 'Pin bookmark'}>
+          <button type="button" onClick={handlePinToggle} disabled={isPending} className={`hover:text-neutral-900 transition-colors ${isPinned ? 'text-neutral-900' : 'text-neutral-400'} disabled:opacity-50 cursor-pointer`} title={isPinned ? 'Unpin bookmark' : 'Pin bookmark'}>
             <Pin className={`w-4 h-4 ${isPinned ? 'fill-current' : ''}`} />
           </button>
         </div>
