@@ -5,7 +5,7 @@ import { db } from '@/db/index'
 import { bookmarks, bookmarksTags, tags } from '@/db/schema'
 import { bookmarkWithTagsSchema, tagWithCountSchema } from '@/db/types'
 
-export async function getBookmarks(sortBy: string = 'recent', filterTags: string[] = []) {
+export async function getBookmarks(sortBy: string = 'recent', filterTags: string[] = [], isArchived: boolean = false) {
   const { userId } = await auth()
 
   if (!userId) {
@@ -20,7 +20,7 @@ export async function getBookmarks(sortBy: string = 'recent', filterTags: string
     orderBy = [desc(bookmarks.visitedCount)]
   }
 
-  let whereClause: SQL | undefined = eq(bookmarks.userId, userId)
+  let whereClause: SQL | undefined = and(eq(bookmarks.userId, userId), eq(bookmarks.isArchived, isArchived))
 
   if (filterTags.length > 0) {
     const matchingBookmarks = db.select({ id: bookmarksTags.bookmarkId }).from(bookmarksTags).innerJoin(tags, eq(bookmarksTags.tagId, tags.id)).where(inArray(tags.name, filterTags))

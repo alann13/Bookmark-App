@@ -1,6 +1,7 @@
 'use server'
 
 import { auth } from '@clerk/nextjs/server'
+import { and, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/db/index'
 import { bookmarks, bookmarksTags, tags } from '@/db/schema'
@@ -84,10 +85,49 @@ export async function createBookmark(formData: FormData) {
       }
     }
 
-    revalidatePath('/bookmark-manager')
+    revalidatePath('/bookmark-manager', 'layout')
     return { success: true }
   } catch (error) {
     console.error('Failed to create bookmark:', error)
     return { error: 'Failed to create bookmark' }
+  }
+}
+
+export async function archiveBookmark(id: string) {
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('Unauthorized')
+  }
+
+  try {
+    await db
+      .update(bookmarks)
+      .set({ isArchived: true })
+      .where(and(eq(bookmarks.id, id), eq(bookmarks.userId, userId)))
+
+    revalidatePath('/bookmark-manager', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to archive bookmark:', error)
+    return { error: 'Failed to archive bookmark' }
+  }
+}
+
+export async function deleteBookmark(id: string) {
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('Unauthorized')
+  }
+
+  try {
+    await db.delete(bookmarks).where(and(eq(bookmarks.id, id), eq(bookmarks.userId, userId)))
+
+    revalidatePath('/bookmark-manager', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to delete bookmark:', error)
+    return { error: 'Failed to delete bookmark' }
   }
 }

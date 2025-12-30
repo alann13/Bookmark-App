@@ -1,6 +1,6 @@
-import { Archive, Home } from 'lucide-react'
 import Link from 'next/link'
 import { getTags } from '@/lib/data'
+import { SidebarNav } from './sidebar-nav'
 import { TagFilter } from './tag-filter'
 
 export async function Sidebar() {
@@ -20,16 +20,7 @@ export async function Sidebar() {
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex flex-col gap-1 px-4 py-4">
-        <Link href="/bookmark-manager" className="flex items-center gap-3 px-3 py-2 bg-neutral-100 text-neutral-900 rounded-lg font-semibold">
-          <Home className="w-5 h-5" />
-          <span>Home</span>
-        </Link>
-        <Link href="/bookmark-manager/archive" className="flex items-center gap-3 px-3 py-2 text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 rounded-lg font-semibold transition-colors">
-          <Archive className="w-5 h-5" />
-          <span>Archive</span>
-        </Link>
-      </nav>
+      <SidebarNav />
 
       {/* Tags Section */}
       <div className="mt-4 px-4">
