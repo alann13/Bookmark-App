@@ -12,7 +12,7 @@ export default async function ArchivePage(props: { searchParams: Promise<{ sort?
     <>
       <Header />
       <div className="flex-1 overflow-y-auto">
-        <BookmarkList bookmarks={bookmarks} />
+        <BookmarkList bookmarks={bookmarks} header="Archived bookmarks" />
       </div>
     </>
   )

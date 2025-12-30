@@ -21,7 +21,7 @@ export function BookmarkManagerClient({ initialBookmarks }: BookmarkManagerClien
     <>
       <Header onSearch={setSearchQuery} />
       <div className="flex-1 overflow-y-auto">
-        <BookmarkList bookmarks={filteredBookmarks} />
+        <BookmarkList bookmarks={filteredBookmarks} header="Your bookmarks" />
       </div>
     </>
   )

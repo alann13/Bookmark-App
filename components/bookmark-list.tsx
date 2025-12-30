@@ -4,14 +4,15 @@ import { BookmarkSort } from './bookmark-sort'
 
 interface BookmarkListProps {
   bookmarks: BookmarkWithTags[]
+  header: string
 }
 
-export function BookmarkList({ bookmarks }: BookmarkListProps) {
+export function BookmarkList({ bookmarks, header }: BookmarkListProps) {
   return (
     <div className="p-8 pt-6">
       {/* List Header */}
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-bold text-neutral-900">All bookmarks</h2>
+        <h2 className="text-2xl font-bold text-neutral-900">{header}</h2>
 
         <BookmarkSort />
       </div>
