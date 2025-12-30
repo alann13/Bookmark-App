@@ -17,6 +17,8 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showUpdateDialog, setShowUpdateDialog] = useState(false)
+  const [showArchiveDialog, setShowArchiveDialog] = useState(false)
+  const [showUnarchiveDialog, setShowUnarchiveDialog] = useState(false)
   const [isPending, startTransition] = useTransition()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -47,14 +49,26 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
   }
 
   const handleArchiveToggle = () => {
-    startTransition(async () => {
-      if (isArchived) {
-        await unarchiveBookmark(id)
-      } else {
-        await archiveBookmark(id)
-      }
-    })
     setIsDropdownOpen(false)
+    if (isArchived) {
+      setShowUnarchiveDialog(true)
+    } else {
+      setShowArchiveDialog(true)
+    }
+  }
+
+  const handleConfirmArchive = () => {
+    startTransition(async () => {
+      await archiveBookmark(id)
+    })
+    setShowArchiveDialog(false)
+  }
+
+  const handleConfirmUnarchive = () => {
+    startTransition(async () => {
+      await unarchiveBookmark(id)
+    })
+    setShowUnarchiveDialog(false)
   }
 
   const handleDelete = () => {
@@ -178,7 +192,6 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
         </div>
       </div>
 
-      {/* Delete Confirmation Dialog */}
       {showDeleteDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Backdrop */}
@@ -197,6 +210,56 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
               </button>
               <button type="button" onClick={handleDelete} disabled={isPending} className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-sm disabled:opacity-50">
                 {isPending ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Archive Confirmation Dialog */}
+      {showArchiveDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
+          <button type="button" className="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-default border-none" onClick={() => setShowArchiveDialog(false)} aria-label="Close dialog" />
+          <div className="relative z-10 w-full max-w-144 bg-white rounded-2xl shadow-2xl p-6 m-4 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-lg font-bold text-neutral-900">Archive bookmark?</h3>
+              <button type="button" onClick={() => setShowArchiveDialog(false)} className="text-neutral-400 hover:text-neutral-600 transition-colors" aria-label="Close">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-neutral-600 mb-6 text-sm">Are you sure you want to archive this bookmark?</p>
+            <div className="flex justify-end gap-3">
+              <button type="button" onClick={() => setShowArchiveDialog(false)} className="px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors border border-neutral-200">
+                Cancel
+              </button>
+              <button type="button" onClick={handleConfirmArchive} disabled={isPending} className="px-4 py-2 text-sm font-semibold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg transition-colors shadow-sm disabled:opacity-50">
+                {isPending ? 'Archiving...' : 'Archive'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Unarchive Confirmation Dialog */}
+      {showUnarchiveDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
+          <button type="button" className="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-default border-none" onClick={() => setShowUnarchiveDialog(false)} aria-label="Close dialog" />
+          <div className="relative z-10 w-full max-w-144 bg-white rounded-2xl shadow-2xl p-6 m-4 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-lg font-bold text-neutral-900">Unarchive bookmark?</h3>
+              <button type="button" onClick={() => setShowUnarchiveDialog(false)} className="text-neutral-400 hover:text-neutral-600 transition-colors" aria-label="Close">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-neutral-600 mb-6 text-sm">Are you sure you want to unarchive this bookmark?</p>
+            <div className="flex justify-end gap-3">
+              <button type="button" onClick={() => setShowUnarchiveDialog(false)} className="px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors border border-neutral-200">
+                Cancel
+              </button>
+              <button type="button" onClick={handleConfirmUnarchive} disabled={isPending} className="px-4 py-2 text-sm font-semibold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg transition-colors shadow-sm disabled:opacity-50">
+                {isPending ? 'Unarchiving...' : 'Unarchive'}
               </button>
             </div>
           </div>
