@@ -1,26 +1,161 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+	/* Neutral Palette - Light Mode */
+	--color-neutral-0: #ffffff;
+	--color-neutral-100: #e8f0ef;
+	--color-neutral-200: #d4d3d9; /* Kept from Figma vars, though somewhat inconsistent naming */
+	--color-neutral-300: #dde9e7;
+	--color-neutral-400: #c0cfcc;
+	--color-neutral-500: #899492;
+	--color-neutral-600: #595454; /* Mapping 700 light to 600 for continuity or explicitly using 700? Using Figma values directly where possible. */
+	--color-neutral-700: #595454;
+	--color-neutral-800: #4c5c59;
+	--color-neutral-900: #051513;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	/* Neutral Palette - Dark Mode (Exposed for Design System Page) */
+	--color-neutral-dark-0: #ffffff;
+	--color-neutral-dark-100: #b1b9b9;
+	--color-neutral-dark-300: #00706e;
+	--color-neutral-dark-400: #004241;
+	--color-neutral-dark-500: #004241;
+	--color-neutral-dark-600: #002e2d;
+	--color-neutral-dark-800: #001f1f;
+	--color-neutral-dark-900: #001414;
+
+	/* Brand/Primary Palette */
+	--color-teal-700: #014745;
+	--color-teal-800: #013c3b;
+	--color-grey-300: #b3b3b3;
+	--color-red-600: #fd4740;
+	--color-red-800: #cb0a04;
+
+	/* Semantic mappings */
+	--background: var(--color-neutral-0);
+	--foreground: var(--color-neutral-900);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	:root {
+		/* Neutral Palette - Dark Mode Mapping */
+		/* Re-mapping standard neutral vars to dark mode values */
+		--color-neutral-0: var(--color-neutral-dark-0);
+		--color-neutral-100: var(--color-neutral-dark-100);
+		/* 200 not explicitly defined for dark in Figma, falling back or keeping light? 
+           Often 200 might map to something between 100/300 or remain 'unused' if not in design. 
+           Leaving as is (light value flows through if we don't override, or we override with closest)
+           Let's override with a sensible value or closest neighbor to avoid flashbangs.
+           Mapping based on inversion logic or specific Figma matches: */
+
+		--color-neutral-300: var(--color-neutral-dark-300);
+		--color-neutral-400: var(--color-neutral-dark-400);
+		--color-neutral-500: var(--color-neutral-dark-500);
+		--color-neutral-600: var(--color-neutral-dark-600);
+		/* 700? Map to 600 or 800? */
+		--color-neutral-800: var(--color-neutral-dark-800);
+		--color-neutral-900: var(--color-neutral-dark-900);
+
+		/* Semantic mappings re-mapping for dark mode */
+		--background: var(--color-neutral-900);
+		--foreground: var(--color-neutral-0);
+	}
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+
+	--color-neutral-0: var(--color-neutral-0);
+	--color-neutral-100: var(--color-neutral-100);
+	--color-neutral-200: var(--color-neutral-200);
+	--color-neutral-300: var(--color-neutral-300);
+	--color-neutral-400: var(--color-neutral-400);
+	--color-neutral-500: var(--color-neutral-500);
+	--color-neutral-600: var(--color-neutral-600);
+	--color-neutral-700: var(--color-neutral-700);
+	--color-neutral-800: var(--color-neutral-800);
+	--color-neutral-900: var(--color-neutral-900);
+
+	/* Dark specific for manual usage if needed */
+	--color-neutral-dark-0: var(--color-neutral-dark-0);
+	--color-neutral-dark-100: var(--color-neutral-dark-100);
+	--color-neutral-dark-300: var(--color-neutral-dark-300);
+	--color-neutral-dark-400: var(--color-neutral-dark-400);
+	--color-neutral-dark-500: var(--color-neutral-dark-500);
+	--color-neutral-dark-600: var(--color-neutral-dark-600);
+	--color-neutral-dark-800: var(--color-neutral-dark-800);
+	--color-neutral-dark-900: var(--color-neutral-dark-900);
+
+	--color-teal-700: var(--color-teal-700);
+	--color-teal-800: var(--color-teal-800);
+	--color-grey-300: var(--color-grey-300);
+	--color-red-600: var(--color-red-600);
+	--color-red-800: var(--color-red-800);
+
+	--font-sans: var(--font-manrope);
+
+	/* Text Presets */
+	/* Preset 1: Bold 24px (140%) */
+	--text-preset-1: 24px;
+	--text-preset-1--font-weight: 700;
+	--text-preset-1--line-height: 1.4;
+
+	/* Preset 2: Bold 20px (120%) */
+	--text-preset-2: 20px;
+	--text-preset-2--font-weight: 700;
+	--text-preset-2--line-height: 1.2;
+
+	/* Preset 3: SemiBold 16px (140%) */
+	--text-preset-3: 16px;
+	--text-preset-3--font-weight: 600;
+	--text-preset-3--line-height: 1.4;
+
+	/* Preset 4: SemiBold 14px (140%) */
+	--text-preset-4: 14px;
+	--text-preset-4--font-weight: 600;
+	--text-preset-4--line-height: 1.4;
+
+	/* Preset 4 (Medium): Medium 14px (150%) - From Figma vars */
+	--text-preset-4-medium: 14px;
+	--text-preset-4-medium--font-weight: 500;
+	--text-preset-4-medium--line-height: 1.5;
+	--text-preset-4-medium--letter-spacing: 1px;
+
+	/* Preset 5: Medium 12px (140%) */
+	--text-preset-5: 12px;
+	--text-preset-5--font-weight: 500;
+	--text-preset-5--line-height: 1.4;
+
+	/* Preset 6: 16px (matches Preset 3 size but maybe different weight? Figma said 16. Assuming regular or match 3) */
+	/* Using 16px, Normal weight? Figma data just said "16". Let's assume standard body text */
+	--text-preset-6: 16px;
+	--text-preset-6--line-height: 1.5;
+
+	/* Spacing */
+	--spacing-xs: 4px;
+	--spacing-sm: 6px;
+	--spacing-md: 8px;
+	--spacing-lg: 12px;
+	--spacing-xl: 16px;
+	--spacing-2xl: 20px;
+
+	--spacing-025: 2px;
+	--spacing-050: 4px;
+	--spacing-075: 6px;
+	--spacing-100: 8px;
+	--spacing-125: 10px;
+	--spacing-150: 12px;
+	--spacing-200: 16px;
+	--spacing-250: 20px;
+	--spacing-300: 24px;
+	--spacing-400: 32px;
+	--spacing-500: 40px;
+	--spacing-1000: 80px;
+	--spacing-1600: 128px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-sans);
 }
