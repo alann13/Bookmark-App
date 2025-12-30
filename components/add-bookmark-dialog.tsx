@@ -1,11 +1,15 @@
 'use client'
 
 import { Plus, X } from 'lucide-react'
-import { useState, useTransition } from 'react'
+import { ReactNode, useState, useTransition } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { createBookmark } from '@/lib/actions'
 
-export function AddBookmarkDialog() {
+interface AddBookmarkDialogProps {
+  trigger?: ReactNode
+}
+
+export function AddBookmarkDialog({ trigger }: AddBookmarkDialogProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -36,10 +40,16 @@ export function AddBookmarkDialog() {
 
   return (
     <>
-      <button type="button" onClick={() => setIsOpen(true)} className="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white p-2.5 md:px-4 md:py-2.5 rounded-lg font-semibold transition-colors shadow-sm cursor-pointer">
-        <Plus className="w-5 h-5" />
-        <span className="hidden md:inline">Add bookmark</span>
-      </button>
+      {trigger ? (
+        <div onClick={() => setIsOpen(true)} className="inline-block cursor-pointer">
+          {trigger}
+        </div>
+      ) : (
+        <button type="button" onClick={() => setIsOpen(true)} className="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white p-2.5 md:px-4 md:py-2.5 rounded-lg font-semibold transition-colors shadow-sm cursor-pointer">
+          <Plus className="w-5 h-5" />
+          <span className="hidden md:inline">Add bookmark</span>
+        </button>
+      )}
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -47,7 +57,7 @@ export function AddBookmarkDialog() {
           <button type="button" className="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-default w-full h-full border-none p-0" onClick={() => setIsOpen(false)} aria-label="Close dialog" />
 
           {/* Modal Content */}
-          <div className="relative z-10 w-full max-w-[36rem] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="relative z-10 w-full max-w-[36rem] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] text-left">
             <div className="px-6 py-5 border-b border-neutral-100 flex items-center justify-between bg-white">
               <div>
                 <h2 className="text-xl font-bold text-neutral-900">Add a bookmark</h2>
