@@ -12,12 +12,12 @@ export async function getBookmarks(sortBy: string = 'recent', filterTags: string
     return []
   }
 
-  let orderBy: any = [desc(bookmarks.createdAt)]
+  let orderBy: any = [desc(bookmarks.isPinned), desc(bookmarks.createdAt)]
   if (sortBy === 'visited') {
     // Determine sort order based on input
-    orderBy = [desc(bookmarks.lastVisited)]
+    orderBy = [desc(bookmarks.isPinned), desc(bookmarks.lastVisited)]
   } else if (sortBy === 'top') {
-    orderBy = [desc(bookmarks.visitedCount)]
+    orderBy = [desc(bookmarks.isPinned), desc(bookmarks.visitedCount)]
   }
 
   let whereClause: SQL | undefined = and(eq(bookmarks.userId, userId), eq(bookmarks.isArchived, isArchived))

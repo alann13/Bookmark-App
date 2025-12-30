@@ -152,3 +152,24 @@ export async function deleteBookmark(id: string) {
     return { error: 'Failed to delete bookmark' }
   }
 }
+
+export async function updateBookmarkPin(id: string, isPinned: boolean) {
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('Unauthorized')
+  }
+
+  try {
+    await db
+      .update(bookmarks)
+      .set({ isPinned })
+      .where(and(eq(bookmarks.id, id), eq(bookmarks.userId, userId)))
+
+    revalidatePath('/bookmark-manager', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to update bookmark pin:', error)
+    return { error: 'Failed to update bookmark pin' }
+  }
+}

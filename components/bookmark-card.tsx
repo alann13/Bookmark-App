@@ -3,7 +3,7 @@
 import { Archive, ArchiveRestore, Calendar, Clock, Copy, ExternalLink, Eye, MoreVertical, Pin, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, useTransition } from 'react'
 import type { BookmarkWithTags } from '@/db/types'
-import { archiveBookmark, deleteBookmark, unarchiveBookmark } from '@/lib/actions'
+import { archiveBookmark, deleteBookmark, unarchiveBookmark, updateBookmarkPin } from '@/lib/actions'
 
 interface BookmarkCardProps {
   bookmark: BookmarkWithTags
@@ -60,6 +60,12 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
       await deleteBookmark(id)
     })
     setShowDeleteDialog(false)
+  }
+
+  const handlePinToggle = () => {
+    startTransition(async () => {
+      await updateBookmarkPin(id, !isPinned)
+    })
   }
 
   return (
@@ -153,7 +159,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
             )}
           </div>
 
-          <button type="button" className={`hover:text-neutral-900 transition-colors ${isPinned ? 'text-neutral-900' : 'text-neutral-400'}`} title={isPinned ? 'Unpin bookmark' : 'Pin bookmark'}>
+          <button type="button" onClick={handlePinToggle} disabled={isPending} className={`hover:text-neutral-900 transition-colors ${isPinned ? 'text-neutral-900' : 'text-neutral-400'} disabled:opacity-50`} title={isPinned ? 'Unpin bookmark' : 'Pin bookmark'}>
             <Pin className={`w-4 h-4 ${isPinned ? 'fill-current' : ''}`} />
           </button>
         </div>
