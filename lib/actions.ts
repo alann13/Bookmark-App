@@ -173,3 +173,93 @@ export async function updateBookmarkPin(id: string, isPinned: boolean) {
     return { error: 'Failed to update bookmark pin' }
   }
 }
+
+export async function updateBookmark(id: string, formData: FormData) {
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('Unauthorized')
+  }
+
+  const title = formData.get('title') as string
+  const url = formData.get('url') as string
+  const description = formData.get('description') as string
+  const tagsString = formData.get('tags') as string
+
+  // Validate basic fields
+  const parsed = insertBookmarkSchema.safeParse({
+    title,
+    url,
+    description,
+  })
+
+  if (!parsed.success) {
+    return { error: 'Invalid input data', details: parsed.error.flatten() }
+  }
+
+  const { data } = parsed
+  const tagNames = tagsString
+    ? tagsString
+        .split(',')
+        .map((t) => t.trim())
+        .filter(Boolean)
+    : []
+
+  try {
+    // 1. Update Bookmark
+    const [updatedBookmark] = await db
+      .update(bookmarks)
+      .set({
+        title: data.title,
+        url: data.url,
+        description: data.description,
+      })
+      .where(and(eq(bookmarks.id, id), eq(bookmarks.userId, userId)))
+      .returning()
+
+    if (!updatedBookmark) {
+      throw new Error('Failed to update bookmark')
+    }
+
+    // 2. Handle Tags
+    // First, remove existing tags for this bookmark
+    await db.delete(bookmarksTags).where(eq(bookmarksTags.bookmarkId, id))
+
+    // Then add the new ones
+    if (tagNames.length > 0) {
+      for (const tagName of tagNames) {
+        // Check if tag exists for this user
+        let tagId: string
+
+        const existingTag = await db.query.tags.findFirst({
+          where: (tags, { eq, and }) => and(eq(tags.name, tagName), eq(tags.userId, userId)),
+        })
+
+        if (existingTag) {
+          tagId = existingTag.id
+        } else {
+          const [newTag] = await db
+            .insert(tags)
+            .values({
+              userId,
+              name: tagName,
+            })
+            .returning()
+          tagId = newTag.id
+        }
+
+        // Link tag to bookmark
+        await db.insert(bookmarksTags).values({
+          bookmarkId: id,
+          tagId,
+        })
+      }
+    }
+
+    revalidatePath('/bookmark-manager', 'layout')
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to update bookmark:', error)
+    return { error: 'Failed to update bookmark' }
+  }
+}

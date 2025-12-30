@@ -1,9 +1,10 @@
 'use client'
 
-import { Archive, ArchiveRestore, Calendar, Clock, Copy, ExternalLink, Eye, MoreVertical, Pin, Trash2, X } from 'lucide-react'
+import { Archive, ArchiveRestore, Calendar, Clock, Copy, ExternalLink, Eye, MoreVertical, Pencil, Pin, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, useTransition } from 'react'
 import type { BookmarkWithTags } from '@/db/types'
 import { archiveBookmark, deleteBookmark, unarchiveBookmark, updateBookmarkPin } from '@/lib/actions'
+import { UpdateBookmarkDialog } from './update-bookmark-dialog'
 
 interface BookmarkCardProps {
   bookmark: BookmarkWithTags
@@ -15,6 +16,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false)
   const [isPending, startTransition] = useTransition()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -103,6 +105,17 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
                   <Copy className="w-4 h-4 text-neutral-500" />
                   Copy URL
                 </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsDropdownOpen(false)
+                    setShowUpdateDialog(true)
+                  }}
+                  className="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                >
+                  <Pencil className="w-4 h-4 text-neutral-500" />
+                  Update
+                </button>
                 <button type="button" onClick={handleArchiveToggle} disabled={isPending} className="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2 disabled:opacity-50">
                   {isArchived ? <ArchiveRestore className="w-4 h-4 text-neutral-500" /> : <Archive className="w-4 h-4 text-neutral-500" />}
                   {isArchived ? 'Unarchive' : 'Archive'}
@@ -189,6 +202,9 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
           </div>
         </div>
       )}
+
+      {/* Update Dialog */}
+      <UpdateBookmarkDialog bookmark={bookmark} isOpen={showUpdateDialog} onClose={() => setShowUpdateDialog(false)} />
     </>
   )
 }
