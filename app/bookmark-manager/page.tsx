@@ -1,5 +1,4 @@
-import { BookmarkList } from '@/components/bookmark-list'
-import { Header } from '@/components/header'
+import { BookmarkManagerClient } from '@/components/bookmark-manager-client'
 import { getBookmarks } from '@/lib/data'
 
 export default async function BookmarkManagerPage(props: { searchParams: Promise<{ sort?: string; tags?: string }> }) {
@@ -8,12 +7,5 @@ export default async function BookmarkManagerPage(props: { searchParams: Promise
   const filterTags = searchParams.tags ? searchParams.tags.split(',') : []
   const bookmarks = await getBookmarks(sort, filterTags)
 
-  return (
-    <>
-      <Header />
-      <div className="flex-1 overflow-y-auto">
-        <BookmarkList bookmarks={bookmarks} />
-      </div>
-    </>
-  )
+  return <BookmarkManagerClient initialBookmarks={bookmarks} />
 }
