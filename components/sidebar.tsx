@@ -1,7 +1,11 @@
 import { Archive, Home } from 'lucide-react'
 import Link from 'next/link'
+import { getTags } from '@/lib/data'
+import { TagFilter } from './tag-filter'
 
-export function Sidebar() {
+export async function Sidebar() {
+  const tags = await getTags()
+
   return (
     <aside className="w-[296px] h-full flex flex-col border-r border-neutral-200 bg-white">
       {/* Logo Section */}
@@ -30,14 +34,7 @@ export function Sidebar() {
       {/* Tags Section */}
       <div className="mt-4 px-4">
         <h3 className="px-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Tags</h3>
-        <div className="flex flex-col gap-1">
-          {['Design', 'Development', 'Marketing', 'Inspiration'].map((tag) => (
-            <button key={tag} className="flex items-center px-3 py-2 text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 rounded-lg font-medium transition-colors text-left">
-              <span className="w-2 h-2 rounded-full bg-neutral-400 mr-3" />
-              {tag}
-            </button>
-          ))}
-        </div>
+        <TagFilter tags={tags} />
       </div>
     </aside>
   )

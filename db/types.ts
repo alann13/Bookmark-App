@@ -49,3 +49,11 @@ export const bookmarkSchema = z.object({
 export const bookmarkWithTagsSchema = bookmarkSchema.extend({
   tags: z.array(z.string()),
 })
+
+export const tagWithCountSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  count: z.number(),
+})
+
+export type TagWithCount = z.infer<typeof tagWithCountSchema>
