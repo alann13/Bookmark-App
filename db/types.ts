@@ -31,3 +31,21 @@ export const insertTagSchema = z.object({
 export type BookmarkWithTags = Bookmark & {
   tags: string[]
 }
+
+export const bookmarkSchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string(),
+  title: z.string(),
+  url: z.string().url(),
+  description: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  lastVisited: z.date().nullable(),
+  visitedCount: z.number(),
+  isPinned: z.boolean(),
+  isArchived: z.boolean(),
+})
+
+export const bookmarkWithTagsSchema = bookmarkSchema.extend({
+  tags: z.array(z.string()),
+})

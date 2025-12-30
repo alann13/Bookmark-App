@@ -1,5 +1,6 @@
 import { UserButton } from '@clerk/nextjs'
-import { Plus, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
+import { AddBookmarkDialog } from './add-bookmark-dialog'
 
 export function Header() {
   return (
@@ -14,10 +15,7 @@ export function Header() {
 
       {/* Right Toolbar */}
       <div className="flex items-center gap-4">
-        <button className="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2.5 rounded-lg font-semibold transition-colors shadow-sm">
-          <Plus className="w-5 h-5" />
-          <span>Add bookmark</span>
-        </button>
+        <AddBookmarkDialog />
 
         <div className="h-8 w-[1px] bg-neutral-300 mx-2" />
 
